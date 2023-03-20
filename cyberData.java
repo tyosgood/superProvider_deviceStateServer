@@ -24,7 +24,6 @@ import java.net.http.*;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.io.*;
 import javax.net.ssl.*;
 
 
@@ -34,8 +33,10 @@ public class cyberData {
 
     public static void lightAction(String action, String URL){
 
+        //Begin code to allow self signed certs and IP address urls
         //using this to disable certificate validation since the CyberData lights have self-signed certs
         //should either give them signed certs or add them to trusted list in prod
+        //_________________________________________________________________________________________________
 
        final Properties props = System.getProperties();
        props.setProperty("jdk.internal.httpclient.disableHostnameVerification", Boolean.TRUE.toString());
@@ -68,26 +69,28 @@ public class cyberData {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-                 
+        //End of code for self-signed certs
+        //_________________________________________________________________________________________________     
                    
         //remove the .sslContext line for prod when we are using signed certs
         HttpClient client = HttpClient.newBuilder()
             .sslContext(sslContext)
             .build();
-
+            
+        //for the cyberData strobes the valid patterns are slow_blink, fast_blink, slow_fade, fast_fade
+        //colors can also be set using the red, green, blue parameters along with brightness
         switch (action){
             case "idle":
                 action = "stop_strobe";
-               // System.out.println("idle in cyberdata");
                 break;
             case "active":
-                action = "start_strobe&red=255&green=255&blue=255&pattern=slow_fade&brightness=128";
+                action = "start_strobe&red=255&green=255&blue=255&pattern=slow_blink&brightness=128";
                 break;
             case "alerting":
                 action = "start_strobe&red=255&green=255&blue=255&pattern=fast_blink&brightness=128";
                 break;
             case "held":
-                action = "start_strobe&red=255&green=255&blue=255&pattern=slow_blink&brightness=128";
+                action = "start_strobe&red=255&green=255&blue=255&pattern=fast_fade&brightness=128";
                 break;
             
         }
@@ -103,16 +106,6 @@ public class cyberData {
 
             CompletableFuture response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
    
-        /* try {
-            System.out.println(request.bodyPublisher());
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-        } catch (IOException e) {
-             //TODO Auto-generated catch block
-           e.printStackTrace();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } */
+        
     }
 }

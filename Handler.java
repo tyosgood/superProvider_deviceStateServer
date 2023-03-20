@@ -27,7 +27,7 @@ import com.cisco.cti.util.Condition;
 
 public class Handler implements ProviderObserver, TerminalObserver {
 
-      public Condition providerInService = new Condition();
+    public Condition providerInService = new Condition();
     public Condition phoneTerminalInService = new Condition();
 
      public void providerChangedEvent(ProvEv[] events) {
@@ -43,8 +43,7 @@ public class Handler implements ProviderObserver, TerminalObserver {
 
     public void terminalChangedEvent(TermEv[] events) {
         for (TermEv ev : events) {
-           // System.out.println("    Received--> Terminal/"+ev.toString());
-           // System.out.println("        From Device:"+ ev.getTerminal().getName());
+           //in the following cases change out "cyberData" to "shelly" to utilize the Shelly smart relays and vice versa
             switch (ev.getID()) {
                 case CiscoTermInServiceEv.ID:
                     phoneTerminalInService.set();
@@ -67,7 +66,8 @@ public class Handler implements ProviderObserver, TerminalObserver {
                     break;
                 case CiscoTermDeviceStateWhisperEv.ID:
                     System.out.println("    "+ev.getTerminal()+" STATE--> "+superProvider_deviceStateServer.stateName.get(CiscoTerminal.DEVICESTATE_WHISPER));
-                    break;            }
+                    break;         
+                }
         }
     }
 
