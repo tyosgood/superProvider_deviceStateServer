@@ -70,7 +70,4 @@ public class Handler implements ProviderObserver, TerminalObserver {
                 }
         }
     }
-
-    
-
 }

@@ -94,6 +94,8 @@ public class cyberData {
                 break;
             
         }
+
+        //create uri and make async http request to control the cyberData light
         URI myUri = URI.create(URL);
 
         HttpRequest request = HttpRequest.newBuilder()
